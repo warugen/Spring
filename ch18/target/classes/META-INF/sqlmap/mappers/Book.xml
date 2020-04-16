@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Book">
+	<resultMap type="Book" id="BookResult">
+		<result property="bnum" column="bnum"/>
+		<result property="btitle" column="btitle"/>
+		<result property="bwriter" column="bwriter"/>
+		<result property="rdate" column="rdate"/>
+		<result property="bimg1" column="bimg1"/>
+		<result property="bimg2" column="bimg2"/>
+		<result property="binfo" column="binfo"/>
+	</resultMap>
+	
+	<select id="mainList" resultMap="BookResult">
+		<![CDATA[
+			SELECT * FROM BOOK ORDER BY BRDATE DESC		
+		]]>
+	</select>
+	
+	<select id="bookList" parameterType="Book" resultMap="BookResult">
+		<![CDATA[
+			SELECT * FROM (SELECT ROWNUM RN, A.* FROM (
+						SELECT * FROM BOOK ORDER BY BTITLE) A)
+		    WHERE RN BETWEEN #{startRow} AND #{endRow}	
+		]]>
+	</select>
+	
+	<select id="cntBook" resultType="int">
+		<![CDATA[
+			SELECT COUNT(*) FROM BOOK
+		]]>
+	</select>
+	
+	<select id="getBook" parameterType="int" resultType="Book">
+		<![CDATA[
+			SELECT * FROM BOOK WHERE BNUM=#{bnum}
+		]]>
+	</select>
+	
+	<insert id="registerBook" parameterType="Book">
+		<if test="bimg1=='' and bimg2!=''">
+			<![CDATA[
+			INSERT INTO BOOK (bnum, btitle, bwriter, brdate, bimg2, binfo) VALUES
+    			(BOOK_SQ.NEXTVAL, #{btitle}, #{bwriter}, SYSDATE, #{bimg2},#{binfo})
+			]]>
+		</if>
+		
+		<if test="bimg1!='' and bimg2==''">
+				<![CDATA[
+			INSERT INTO BOOK (bnum, btitle, bwriter, brdate, bimg1, binfo) VALUES
+    			(BOOK_SQ.NEXTVAL, #{btitle}, #{bwriter}, SYSDATE, #{bimg1}, #{binfo})
+		]]>
+		</if>
+		
+		<if test="bimg1!='' and bimg2!=''">
+		<![CDATA[
+			INSERT INTO BOOK (bnum, btitle, bwriter, brdate, bimg1, bimg2, binfo) VALUES
+    			(BOOK_SQ.NEXTVAL, #{btitle}, #{bwriter}, SYSDATE, #{bimg1}, #{bimg2},#{binfo})
+		]]>
+		</if>
+	</insert>
+	
+	<update id="modifyBook" parameterType="Book">
+			UPDATE BOOK SET
+			    btitle = #{btitle},
+			    bwriter = #{bwriter},
+			    brdate = #{brdate},
+			    <if test="bimg1!=''">bimg1 = #{bimg1},</if>
+			    <if test="bimg2!=''">bimg2 = #{bimg2},</if>
+			    binfo = #{binfo}
+		    WHERE BNUM = #{bnum}
+	</update>	
+</mapper>

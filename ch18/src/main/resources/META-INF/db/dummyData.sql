@@ -1,0 +1,12 @@
+SELECT * FROM MEMBER;
+
+INSERT INTO BOOK VALUES (
+    BOOK_SQ.NEXTVAL, 'Spring', '김스프링', SYSDATE, 'NOTHING.JPG', 'NOTHING.JPG', '좋은 스프링 책이다'
+);
+
+-- B_MEMBER 테이블
+INSERT INTO B_MEMBER VALUES(
+    'aaa', '111', '홍길동', 'HONG@NAVER.COM', '12345', '종로'
+);
+
+COMMIT;

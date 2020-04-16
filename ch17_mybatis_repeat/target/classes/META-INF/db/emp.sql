@@ -1,0 +1,11 @@
+SELECT * FROM DEPT;
+SELECT * FROM EMP;
+SELECT * FROM EMP WHERE ENAME LIKE '%A%';
+SELECT * FROM EMP WHERE JOB LIKE '%E%';
+SELECT * FROM EMP WHERE DEPTNO = 20;
+
+-- Dept.xml의 id=deptList
+SELECT * FROM DEPT;
+
+-- Emp.xml의 id=empList
+SELECT * FROM EMP where 1=1 and ename like '%A%';

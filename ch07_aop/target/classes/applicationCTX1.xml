@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.2.xsd">
+	
+	<!-- Proxy 개체를 먼저 올려놓기 -->
+	<bean id="procxyClass" class="com.tj.ex1.ProxyClass"/>
+	
+	<!-- Namespaces탭에서 aop활성화 체크 -->
+	<aop:config>
+		<aop:aspect id="aroundAspect" ref="procxyClass">
+			<aop:pointcut expression="within(com.tj.ex1.*)" id="aroundM"/>
+			<aop:around method="aroundAdvice" pointcut-ref="aroundM"/>
+		</aop:aspect>
+		
+		<aop:aspect id="beforeAspect" ref="procxyClass">
+			<aop:pointcut expression="within(com.tj.ex1.Worker)" id="beforeM"/>
+			<aop:before method="beforeAdvice" pointcut-ref="beforeM"/>
+		</aop:aspect>
+		
+		<aop:aspect id="afterAspect" ref="procxyClass">
+			<!-- 선언방식이 여러가지이다.
+			<aop:pointcut expression="execution(public void get*(..))" id="afterM"/>
+		 	-->
+			<aop:pointcut expression="execution(* com.tj.ex1.Worker.get*())" id="afterM"/>
+			<aop:after method="afterAdvice" pointcut-ref="afterM"/>
+		</aop:aspect>
+		
+		<aop:aspect id="afterReturnAspect" ref="procxyClass">
+			<aop:pointcut expression="bean(stude*)" id="afterReturnM"/>
+			<aop:after method="afterReturningAdvice" pointcut-ref="afterReturnM"/>
+		</aop:aspect>
+	</aop:config>
+
+	<bean id="student" class="com.tj.ex1.Student">
+		<property name="name" value="홍길동"/>
+		<property name="age" value="20"/>
+		<property name="gradeNum" value="2"/>
+		<property name="classNum" value="1"/>
+	</bean>
+	
+	<bean id="worker" class="com.tj.ex1.Worker">
+		<property name="name" value="성춘향"/>
+		<property name="age" value="16"/>
+		<property name="job" value="학생"/>	
+	</bean>
+</beans>

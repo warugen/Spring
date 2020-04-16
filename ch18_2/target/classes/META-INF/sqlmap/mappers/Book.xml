@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Book">
+	<resultMap type="Book" id="BookResult">
+		<result property="bnum" column="bnum"/>
+		<result property="btitle" column="btitle"/>
+		<result property="bwriter" column="bwriter"/>
+		<result property="rdate" column="rdate"/>
+		<result property="bimg1" column="bimg1"/>
+		<result property="bimg2" column="bimg2"/>
+		<result property="binfo" column="binfo"/>
+	</resultMap>
+	
+	<select id="mainList" resultMap="BookResult">
+		<![CDATA[
+			SELECT * FROM BOOK ORDER BY BRDATE DESC		
+		]]>
+	</select>
+	
+	<!-- 책이름 가나다순으로 PAGING처리  -->
+	<select id="bookList" parameterType="Book" resultMap="BookResult">
+		<if test="schItem=='all'">
+			SELECT * FROM (SELECT ROWNUM RN, A.* FROM (
+					SELECT * FROM BOOK WHERE BTITLE LIKE '%'||#{schWord}||'%' OR BWRITER LIKE '%'||#{schWord}||'%' ORDER BY BTITLE) A)
+	    	WHERE RN BETWEEN #{startRow} AND #{endRow}
+		</if>
+		<if test="schItem=='btitle'">
+			SELECT * FROM (SELECT ROWNUM RN, A.* FROM (
+						SELECT * FROM BOOK WHERE BTITLE LIKE '%'||#{schWord}||'%' ORDER BY BTITLE) A)
+		    WHERE RN BETWEEN #{startRow} AND #{endRow}
+		</if>
+		<if test="schItem=='bwriter'">
+			SELECT * FROM (SELECT ROWNUM RN, A.* FROM (
+						SELECT * FROM BOOK WHERE BWRITER LIKE '%'||#{schWord}||'%' ORDER BY BTITLE) A)
+		    WHERE RN BETWEEN #{startRow} AND #{endRow}
+		</if>
+		<if test="schItem=='' or schItem==null">
+			SELECT * FROM (SELECT ROWNUM RN, A.* FROM (
+						SELECT * FROM BOOK ORDER BY BTITLE) A)
+		    WHERE RN BETWEEN #{startRow} AND #{endRow}
+		</if>
+	</select>
+
+	
+	<!-- 페이징 때 쓰려고 등록된 책 갯수-->
+	<select id="cntBook" parameterType="Book" resultType="int">
+		<if test="schItem=='all'">
+			SELECT COUNT(*) FROM BOOK WHERE BTITLE LIKE '%'||#{schWord, jdbcType = VARCHAR}||'%' OR	BWRITER LIKE '%'||#{schWord}||'%'
+		</if>
+		<if test="schItem=='btitle'">
+			SELECT COUNT(*) FROM BOOK WHERE BTITLE LIKE '%'||#{schWord}||'%'
+		</if>
+		<if test="schItem=='bwriter'">
+			SELECT COUNT(*) FROM BOOK WHERE BWRITER LIKE '%'||#{schWord}||'%'
+		</if>
+		<if test="schItem=='' or schItem==null">
+			SELECT COUNT(*) FROM BOOK
+		</if>
+	</select>
+	
+	
+	<select id="getBook" parameterType="int" resultType="Book">
+		<![CDATA[
+			SELECT * FROM BOOK WHERE BNUM=#{bnum}
+		]]>
+	</select>
+	
+	<insert id="registerBook" parameterType="Book">
+		<if test="bimg1=='' and bimg2!=''">
+			<![CDATA[
+			INSERT INTO BOOK (bnum, btitle, bwriter, brdate, bimg2, binfo) VALUES
+    			(BOOK_SQ.NEXTVAL, #{btitle}, #{bwriter}, SYSDATE, #{bimg2},#{binfo})
+			]]>
+		</if>
+		
+		<if test="bimg1!='' and bimg2==''">
+				<![CDATA[
+			INSERT INTO BOOK (bnum, btitle, bwriter, brdate, bimg1, binfo) VALUES
+    			(BOOK_SQ.NEXTVAL, #{btitle}, #{bwriter}, SYSDATE, #{bimg1}, #{binfo})
+		]]>
+		</if>
+		
+		<if test="bimg1!='' and bimg2!=''">
+		<![CDATA[
+			INSERT INTO BOOK (bnum, btitle, bwriter, brdate, bimg1, bimg2, binfo) VALUES
+    			(BOOK_SQ.NEXTVAL, #{btitle}, #{bwriter}, SYSDATE, #{bimg1}, #{bimg2},#{binfo})
+		]]>
+		</if>
+	</insert>
+	
+	<update id="modifyBook" parameterType="Book">
+			UPDATE BOOK SET
+			    btitle = #{btitle},
+			    bwriter = #{bwriter},
+			    brdate = #{brdate},
+			    <if test="bimg1!=''">bimg1 = #{bimg1},</if>
+			    <if test="bimg2!=''">bimg2 = #{bimg2},</if>
+			    binfo = #{binfo}
+		    WHERE BNUM = #{bnum}
+	</update>	
+</mapper>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean id="student1" class="com.tj.ex1student.Student">
+		<constructor-arg>
+			<value>홍길동</value>
+		</constructor-arg>
+		<constructor-arg>
+			<value>20</value>
+		</constructor-arg>
+		<constructor-arg>
+			<value>2학년</value>
+		</constructor-arg>
+		<constructor-arg>
+			<value>B반</value>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="student2" class="com.tj.ex1student.Student">
+		<constructor-arg value="성춘향"/>
+		<constructor-arg value="19"/>
+		<constructor-arg value="고3"/>
+		<constructor-arg value="A반"/>
+	</bean>
+	
+	<bean id="studentInfo" class="com.tj.ex1student.StudentInfo">
+		<constructor-arg>
+			<ref bean="student1" />
+		</constructor-arg>
+	</bean>
+</beans>
