@@ -20,14 +20,11 @@
 }
 </style>
 <link href="${conPath }/css/style.css" rel="stylesheet">
+<!-- kakao api -->
 <script src="${conPath }/js/kakao.js" type="text/javascript"></script>
 <script
 	src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-<script type="text/javascript">
-	$(document).ready(function() {
-		
-	});
-</script>
+
 </head>
 <body>
 	<h2>login page</h2>
@@ -47,66 +44,105 @@
 		width="222" />
 	</a>
 
-	<script type="text/javascript">
-  // input your appkey
-  Kakao.init('3153b15ee605504fc683c26e15e2324a')
-  console.log(Kakao.isInitialized());
-  function loginWithKakao() {
-    Kakao.Auth.login({
-      success: function(authObj) {
-        alert(JSON.stringify(authObj))
-        console.log(JSON.stringify(authObj))
-      },
-      fail: function(err) {
-        alert(JSON.stringify(err))
-      },
-    })
-  }
-  
-  function kakaoLogout() {
-	    if (!Kakao.Auth.getAccessToken()) {
-	      alert('Not logged in.')
-	      return
-	    }
-	    Kakao.Auth.logout(function() {
-	      alert('logout ok\naccess token -> ' + Kakao.Auth.getAccessToken())
-	    })
-	  }
-  
-  Kakao.Auth.createLoginButton({
-	    container: '#kakao-login-btn',
-	    success: function(authObj) {
-	      Kakao.API.request({
-	        url: '/v2/user/me',
-	        success: function(res) {
-	          alert(JSON.stringify(res))
-	          console.log("id : "+res.id);
-	          console.log("email : "+res.kakao_account.email);
-	          console.log("nicknamel : "+res.nickname);
 
-	        },
-	        fail: function(error) {
-	          alert(
-	            'login success, but failed to request user information: ' +
-	              JSON.stringify(error)
-	          )
-	        },
-	      })
+	<script type="text/javascript">
+	
+
+	// 카카오 로그인 함수
+	// input your appkey
+	Kakao.init('3153b15ee605504fc683c26e15e2324a')
+	console.log(Kakao.isInitialized());
+	
+	// 첫번째 버튼
+	function loginWithKakao() {
+	  Kakao.Auth.login({
+		  scope: 'account_email',
+	    success: function(authObj) {
+	      alert(JSON.stringify(authObj))
+	      console.log(JSON.stringify(authObj))
+	      var obj = Kakao.Auth.getAccessToken();
+	      console.log(obj);
 	    },
 	    fail: function(err) {
-	      alert('failed to login: ' + JSON.stringify(err))
+	      alert(JSON.stringify(err))
 	    },
 	  })
-	  
-	  function loginFormWithKakao() {
-    Kakao.Auth.loginForm({
-      success: function(authObj) {
-        alert(JSON.stringify(authObj))
-      },
-      fail: function(err) {
-        alert(JSON.stringify(err))
-      },
-    })
+	}
+	
+	// 두번째 버튼 로그아웃
+	function kakaoLogout() {
+	   if (!Kakao.Auth.getAccessToken()) {
+	     alert('Not logged in.')
+	     return
+	   }
+	   Kakao.Auth.logout(function() {
+	     alert('logout ok\naccess token -> ' + Kakao.Auth.getAccessToken())
+	   })
+	 }
+	
+	// 세번째 버튼
+	Kakao.Auth.createLoginButton({
+	   container: '#kakao-login-btn',
+	   success: function(authObj) {
+	     Kakao.API.request({
+	    	 url: '/v2/user/me',	       
+	       success: function(res) {
+	    	   var obj = JSON.stringify(res);
+	         //alert(JSON.stringify(res));
+	         alert(obj);
+	         console.log(res);
+	         console.log("id : "+res.id);
+	         console.log("email : "+res.kakao_account.email);
+	         console.log("nicknamel : "+res.nickname);
+	
+	       },
+	       fail: function(error) {
+	         alert(
+	           'login success, but failed to request user information: ' +
+	             JSON.stringify(error)
+	         )
+	       },
+	     })
+	   },
+	   fail: function(err) {
+	     alert('failed to login: ' + JSON.stringify(err))
+	   },
+	 })
+	 
+	 // 네번째 버튼
+	 function loginFormWithKakao() {
+	  Kakao.Auth.loginForm({
+		  scope: 'account_email',
+	    success: function(authObj) {
+	    	Kakao.API.request({
+		    	 url: '/v2/user/me',	       
+		       success: function(res) {
+		    	   var obj = JSON.stringify(res);
+		         //alert(JSON.stringify(res));
+		         alert(obj);
+		         console.log(res);
+		         console.log("id : "+res.id);
+		         console.log("email : "+res.kakao_account.email);
+		         console.log("nicknamel : "+res.nickname);
+		
+		       },
+		       fail: function(error) {
+		         alert(
+		           'login success, but failed to request user information: ' +
+		             JSON.stringify(error)
+		         )
+		       },
+		     })
+    	/*
+		alert(JSON.stringify(authObj));
+	    console.log(authObj);
+	    */
+	    	
+	    },
+	    fail: function(err) {
+	      alert(JSON.stringify(err));
+	    },
+	  })
   }
 </script>
 </body>

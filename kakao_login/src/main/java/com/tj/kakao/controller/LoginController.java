@@ -12,4 +12,10 @@ public class LoginController {
 		
 		return "login/login";
 	}
+	
+	@RequestMapping(params="method=glogin")
+	public String glogin(Model model) {
+		
+		return "login/glogin";
+	}
 }
