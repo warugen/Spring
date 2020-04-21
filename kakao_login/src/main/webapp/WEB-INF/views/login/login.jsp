@@ -9,6 +9,7 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <style type="text/css">
+
 .api-btn {
 	min-width: 222px;
 	height: 49px;
@@ -51,7 +52,7 @@
 	// 카카오 로그인 함수
 	// input your appkey
 	Kakao.init('3153b15ee605504fc683c26e15e2324a')
-	console.log(Kakao.isInitialized());
+	console.log('kakao init : '+Kakao.isInitialized());
 	
 	// 첫번째 버튼
 	function loginWithKakao() {

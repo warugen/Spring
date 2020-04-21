@@ -18,4 +18,12 @@ public class LoginController {
 		
 		return "login/glogin";
 	}
+	
+	@RequestMapping(params="method=splogin")
+	public String splogin(Model model) {
+		
+		return "login/splogin";
+	}
+	
+	
 }

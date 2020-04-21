@@ -37,6 +37,10 @@ function checkLoginStatus(){
     } else {
       console.log('logouted');
       loginBtn.value = 'Login';
+      
+      $('input[name=gid]').val('');
+      $('input[name=gname]').val('');
+      $('input[name=gemail]').val('');
     }
   }
   function init(){

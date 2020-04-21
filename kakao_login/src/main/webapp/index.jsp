@@ -7,7 +7,6 @@
 <meta charset="UTF-8">
 </head>
 <body>
-	<jsp:forward page="login.do?method=login"/>
-	
+	<jsp:forward page="login.do?method=splogin"/>
 </body>
 </html>
